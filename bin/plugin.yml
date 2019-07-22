@@ -1,0 +1,8 @@
+name: pianqian
+main: com.dislikeyou.pianqian.Main
+version: 0.0.1
+commands:
+  pianqian:
+    description: nothing
+    usage: /<command>
+depend: [Vault]
