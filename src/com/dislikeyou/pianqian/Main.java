@@ -44,6 +44,8 @@ public class Main extends JavaPlugin implements Listener {
 	public static ItemMeta itemmeta = item.getItemMeta();
 	public static ItemStack goldingot = new ItemStack(Material.GOLD_INGOT);
 	public static ItemMeta goldingotmeta = goldingot.getItemMeta();
+	public static ItemStack sale = new ItemStack(Material.IRON_INGOT);
+	public static ItemMeta salemeta = sale.getItemMeta();
 	  private static boolean supportVault = false;
 
 	  public static boolean setupEconomy()
@@ -84,7 +86,18 @@ public class Main extends JavaPlugin implements Listener {
 			duihuanmeta.setDisplayName("兑换称号");
 			duihuan.setItemMeta(duihuanmeta);
 			inv.setItem(3, duihuan);
+			salemeta.setDisplayName("出售碎片");
+			sale.setItemMeta(salemeta);
+			inv.setItem(5, sale);
 			Bukkit.getPlayer(sender.getName()).openInventory(inv);
+			if(str1[1]=="reload") 
+			{
+				if(sender.isOp()) 
+				{
+				this.reloadConfig();
+				sender.sendMessage("重载完毕");
+				}
+			}
 			return true;
 		}
 		return false;
@@ -118,6 +131,8 @@ public class Main extends JavaPlugin implements Listener {
 			}
 			if(e.getSlot()==3) 
 			{
+				try 
+				{
 				List<String> lore = itemmeta.hasLore()?itemmeta.getLore():new ArrayList<String>();
 				int count = getConfig().getInt("count");
 				getLogger().info(""+count);
@@ -166,6 +181,91 @@ public class Main extends JavaPlugin implements Listener {
 				goldingot.setItemMeta(goldingotmeta);
 				inv2.setItem(34, goldingot);
 				e.getView().getPlayer().openInventory(inv2);
+				}
+				catch(Exception e1)
+				{
+					getLogger().info("已打开");
+				}
+			}
+			if(e.getSlot() == 5) 
+			{
+				inv3.clear();
+				List<String> lore = itemmeta.hasLore()?itemmeta.getLore():new ArrayList<String>();
+				lore.clear();
+				lore.add("出售：10G");
+				itemmeta.setDisplayName("咸鱼碎片");
+				item.setLore(lore);
+				item.setItemMeta(itemmeta);
+				inv3.setItem(0, item);
+				lore.clear();
+				lore.add("出售：15G");
+				itemmeta.setDisplayName("烈焰王者碎片");
+				item.setLore(lore);
+				item.setItemMeta(itemmeta);
+				inv3.setItem(1, item);
+				lore.clear();
+				lore.add("出售：20G");
+				itemmeta.setDisplayName("baka!碎片");
+				item.setLore(lore);
+				item.setItemMeta(itemmeta);
+				inv3.setItem(2, item);
+				lore.clear();
+				lore.add("出售：25G");
+				itemmeta.setDisplayName("冰霜行者碎片");
+				item.setLore(lore);
+				item.setItemMeta(itemmeta);
+				inv3.setItem(3, item);
+				e.getView().getPlayer().openInventory(inv3);
+				e.setCancelled(true);
+			}
+			e.setCancelled(true);
+		}
+		if(e.getView().getTitle().equals("选择您要出售的碎片")) 
+		{
+			int slot = e.getSlot();
+			int fish = getConfig().getInt("fish_"+e.getView().getPlayer().getName());
+			int fire = getConfig().getInt("fire_"+e.getView().getPlayer().getName());
+			int baka = getConfig().getInt("baka_"+e.getView().getPlayer().getName());
+			int afir = getConfig().getInt("afir_"+e.getView().getPlayer().getName());
+			if(slot == 0) 
+			{
+				if(fish>=1) 
+				{
+					fish-=1;
+					getConfig().set("fish_"+e.getView().getPlayer().getName(), fish);
+					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+fish);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 10");
+				}
+			}
+			if(slot == 1) 
+			{
+				if(fire>=1) 
+				{
+					fire-=1;
+					getConfig().set("fire_"+e.getView().getPlayer().getName(), fire);
+					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+fire);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 15");
+				}
+			}
+			if(slot == 2) 
+			{
+				if(baka>=1) 
+				{
+					baka-=1;
+					getConfig().set("baka_"+e.getView().getPlayer().getName(), baka);
+					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+baka);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 20");
+				}
+			}
+			if(slot == 3) 
+			{
+				if(afir>=1) 
+				{
+					afir-=1;
+					getConfig().set("afir_"+e.getView().getPlayer().getName(), afir);
+					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+afir);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 25");
+				}
 			}
 			e.setCancelled(true);
 		}
@@ -301,7 +401,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("fish_"+e.getView().getPlayer().getName());
 						if(getConfig().get("fish_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 10;
 						getConfig().set("fish_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -320,7 +420,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("fish_"+e.getView().getPlayer().getName());
 						if(getConfig().get("fish_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 5;
 						getConfig().set("fish_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -332,7 +432,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("fish_"+e.getView().getPlayer().getName());
 						if(getConfig().get("fish_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 5;
 						getConfig().set("fish_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -385,7 +485,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("fire_"+e.getView().getPlayer().getName());
 						if(getConfig().get("fire_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 10;
 						getConfig().set("fire_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -404,7 +504,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("fire_"+e.getView().getPlayer().getName());
 						if(getConfig().get("fire_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 5;
 						getConfig().set("fire_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -416,7 +516,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("fire_"+e.getView().getPlayer().getName());
 						if(getConfig().get("fire_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 5;
 						getConfig().set("fire_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -470,7 +570,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("baka_"+e.getView().getPlayer().getName());
 						if(getConfig().get("baka_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 10;
 						getConfig().set("baka_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -489,7 +589,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("baka_"+e.getView().getPlayer().getName());
 						if(getConfig().get("baka_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 5;
 						getConfig().set("baka_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -501,7 +601,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("baka_"+e.getView().getPlayer().getName());
 						if(getConfig().get("baka_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 5;
 						getConfig().set("baka_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -554,7 +654,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("afir_"+e.getView().getPlayer().getName());
 						if(getConfig().get("afir_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 10;
 						getConfig().set("afir_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -573,7 +673,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("afir_"+e.getView().getPlayer().getName());
 						if(getConfig().get("afir_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 5;
 						getConfig().set("afir_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
@@ -585,7 +685,7 @@ public class Main extends JavaPlugin implements Listener {
 						int fish = getConfig().getInt("afir_"+e.getView().getPlayer().getName());
 						if(getConfig().get("afir_"+e.getView().getPlayer().getName()) == null) 
 							fish = 0;
-						fish += 2;
+						fish += 5;
 						getConfig().set("afir_"+e.getView().getPlayer().getName(), fish);
 						this.saveConfig();
 						this.reloadConfig();
