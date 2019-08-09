@@ -1,7 +1,9 @@
 package com.dislikeyou.pianqian;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -90,40 +92,140 @@ public class Main extends JavaPlugin implements Listener {
 			sale.setItemMeta(salemeta);
 			inv.setItem(5, sale);
 			Bukkit.getPlayer(sender.getName()).openInventory(inv);
-			if(str1[1]=="reload") 
+			
+			return true;
+		}
+		if(cmd.getName().equalsIgnoreCase("pqreload"))
+		{
+			if(sender.isOp()) 
 			{
-				if(sender.isOp()) 
+			this.reloadConfig();
+			sender.sendMessage("重载完毕");
+			return true;
+			}
+			else 
+			{
+				sender.sendMessage("HEY!刁民你不能那么做！");
+				return true;
+			}
+		}
+		if(cmd.getName().equalsIgnoreCase("pqsell")) 
+		{
+			int fish = getConfig().getInt("fish_"+Bukkit.getPlayer(sender.getName()).getName());
+			int fire = getConfig().getInt("fire_"+Bukkit.getPlayer(sender.getName()).getName());
+			int baka = getConfig().getInt("baka_"+Bukkit.getPlayer(sender.getName()).getName());
+			int afir = getConfig().getInt("afir_"+Bukkit.getPlayer(sender.getName()).getName());
+			int cust = getConfig().getInt("cus_"+Bukkit.getPlayer(sender.getName()).getName());
+			if(str1[0].equals("fish")) 
+			{
+				int amount = Integer.parseInt(str1[1]);
+				if(fish>=amount) 
 				{
-				this.reloadConfig();
-				sender.sendMessage("重载完毕");
+					fish-=amount;
+					int qian = amount * 10;
+					String qianqian = qian+"";
+					double hand = qian * 0.1;
+					String hands = hand+"";
+					qian -= hand;
+					qianqian = qian+"";
+					getConfig().set("fish_"+sender.getName(), fish);
+					sender.sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了"+str1[1]+"碎片，你还剩"+fish+"收取手续费"+hands);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+sender.getName()+" "+qianqian);
+				}
+				else 
+				{
+					sender.sendMessage("然而你并没有那么多碎片");
 				}
 			}
-			return true;
+			if(str1[0].equals("fire")) 
+			{
+				int amount = Integer.parseInt(str1[1]);
+				if(fire>=amount) 
+				{
+					fire-=amount;
+					int qian = amount * 15;
+					String qianqian = qian+"";
+					double hand = qian * 0.1;
+					String hands = hand+"";
+					qian -= hand;
+					qianqian = qian+"";
+					getConfig().set("fire_"+sender.getName(), fire);
+					sender.sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了"+str1[1]+"碎片，你还剩"+fire+"收取手续费"+hands);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+sender.getName()+" "+qianqian);
+				}
+				else 
+				{
+					sender.sendMessage("然而你并没有那么多碎片");
+				}
+			}
+			if(str1[0].equals("baka")) 
+			{
+				int amount = Integer.parseInt(str1[1]);
+				if(baka>=amount) 
+				{
+					baka-=amount;
+					int qian = amount * 10;
+					String qianqian = qian+"";
+					double hand = qian * 0.1;
+					String hands = hand+"";
+					qian -= hand;
+					qianqian = qian+"";
+					getConfig().set("baka_"+sender.getName(), baka);
+					sender.sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了"+str1[1]+"碎片，你还剩"+baka+"收取手续费"+hands);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+sender.getName()+" "+qianqian);
+				}
+				else 
+				{
+					sender.sendMessage("然而你并没有那么多碎片");
+				}
+			}
+			if(str1[0].equals("afir")) 
+			{
+				int amount = Integer.parseInt(str1[1]);
+				if(afir>=amount) 
+				{
+					afir-=amount;
+					int qian = amount * 25;
+					String qianqian = qian+"";
+					double hand = qian * 0.1;
+					String hands = hand+"";
+					qian -= hand;
+					qianqian = qian+"";
+					getConfig().set("afir_"+sender.getName(), afir);
+					sender.sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了"+str1[1]+"碎片，你还剩"+afir+"收取手续费"+hands);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+sender.getName()+" "+qianqian);
+				}
+				else 
+				{
+					sender.sendMessage("然而你并没有那么多碎片");
+				}
+			}
 		}
 		return false;
 	}
 	@EventHandler
 	public void onClick(InventoryClickEvent e) 
 	{
+		Random rand = new Random(System.currentTimeMillis());
 		if(e.getView().getTitle().equals("选择您的操作")) 
 		{
 			if(e.getSlot() == 1) 
 			{
 				inv1.clear();
 				springmeta.setDisplayName("春暖花开称号箱 50G");
-				springmeta.addEnchant(Enchantment.DIG_SPEED, 20, true);
+				springmeta.addEnchant(Enchantment.DIG_SPEED, 1, true);
 			    spring.setItemMeta(springmeta);
 			    inv1.setItem(1, spring);
 			    summermeta.setDisplayName("夏日炎炎称号箱80G");
-			    summermeta.addEnchant(Enchantment.DIG_SPEED,20,true);
+			    springmeta.addEnchant(Enchantment.DIG_SPEED, 1, true);
 			    summer.setItemMeta(summermeta);
 			    inv1.setItem(3, summer);
 			    fallmeta.setDisplayName("秋风瑟瑟称号箱100G");
-			    fallmeta.addEnchant(Enchantment.DIG_SPEED,20,true);
+			    fallmeta.addEnchant(Enchantment.DIG_SPEED, 1, true);
 			    fall.setItemMeta(fallmeta);
 			    inv1.setItem(5, fall);
 			    wintermeta.setDisplayName("冬季攻势称号箱250G");
-			    wintermeta.addEnchant(Enchantment.DIG_SPEED,20,true);
+			    wintermeta.addEnchant(Enchantment.DIG_SPEED, 1, true);
 			    winter.setItemMeta(wintermeta);
 			    inv1.setItem(7,winter);
 				e.getView().getPlayer().openInventory(inv1);
@@ -136,7 +238,7 @@ public class Main extends JavaPlugin implements Listener {
 				List<String> lore = itemmeta.hasLore()?itemmeta.getLore():new ArrayList<String>();
 				int count = getConfig().getInt("count");
 				getLogger().info(""+count);
-				for(int a= 0;a<5;a++) 
+				for(int a= 0;a<count;a++) 
 				{
 					lore.clear();
 					itemmeta.setDisplayName(getConfig().getString(a+"b"));
@@ -215,6 +317,12 @@ public class Main extends JavaPlugin implements Listener {
 				item.setLore(lore);
 				item.setItemMeta(itemmeta);
 				inv3.setItem(3, item);
+				lore.clear();
+				lore.add("出售：6000G");
+				itemmeta.setDisplayName("自定义碎片");
+				item.setLore(lore);
+				item.setItemMeta(itemmeta);
+				inv3.setItem(4, item);
 				e.getView().getPlayer().openInventory(inv3);
 				e.setCancelled(true);
 			}
@@ -227,6 +335,7 @@ public class Main extends JavaPlugin implements Listener {
 			int fire = getConfig().getInt("fire_"+e.getView().getPlayer().getName());
 			int baka = getConfig().getInt("baka_"+e.getView().getPlayer().getName());
 			int afir = getConfig().getInt("afir_"+e.getView().getPlayer().getName());
+			int cust = getConfig().getInt("cus_"+e.getView().getPlayer().getName());
 			if(slot == 0) 
 			{
 				if(fish>=1) 
@@ -234,7 +343,7 @@ public class Main extends JavaPlugin implements Listener {
 					fish-=1;
 					getConfig().set("fish_"+e.getView().getPlayer().getName(), fish);
 					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+fish);
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 10");
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 8");
 				}
 			}
 			if(slot == 1) 
@@ -244,7 +353,7 @@ public class Main extends JavaPlugin implements Listener {
 					fire-=1;
 					getConfig().set("fire_"+e.getView().getPlayer().getName(), fire);
 					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+fire);
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 15");
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 12");
 				}
 			}
 			if(slot == 2) 
@@ -254,7 +363,7 @@ public class Main extends JavaPlugin implements Listener {
 					baka-=1;
 					getConfig().set("baka_"+e.getView().getPlayer().getName(), baka);
 					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+baka);
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 20");
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 17");
 				}
 			}
 			if(slot == 3) 
@@ -264,21 +373,33 @@ public class Main extends JavaPlugin implements Listener {
 					afir-=1;
 					getConfig().set("afir_"+e.getView().getPlayer().getName(), afir);
 					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+afir);
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 25");
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 22");
+				}
+			}
+			if(slot==4) 
+			{
+				if(cust>=1) 
+				{
+					cust-=1;
+					getConfig().set("cus_"+e.getView().getPlayer().getName(), cust);
+					e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]成功卖掉了一个碎片，你还剩"+cust);
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+e.getView().getPlayer().getName()+" 6000");
 				}
 			}
 			e.setCancelled(true);
 		}
 		if(e.getView().getTitle().equals("选择您要兑换的称号")) 
 		{
+		
 			int slot = e.getSlot();
 			int fish = getConfig().getInt("fish_"+e.getView().getPlayer().getName());
 			int fire = getConfig().getInt("fire_"+e.getView().getPlayer().getName());
 			int baka = getConfig().getInt("baka_"+e.getView().getPlayer().getName());
 			int afir = getConfig().getInt("afir_"+e.getView().getPlayer().getName());
+			int cust = getConfig().getInt("cus_"+e.getView().getPlayer().getName());
 			if(e.getSlot() == 34) 
 			{
-				e.getView().getPlayer().sendMessage("您的咸鱼碎片数量是"+fish+"您的烈焰王者碎片数量是"+fire+"您的baka!碎片数量是"+baka+"您的冰霜行者碎片数量是"+afir);
+				e.getView().getPlayer().sendMessage("您的咸鱼碎片数量是"+fish+"您的烈焰王者碎片数量是"+fire+"您的baka!碎片数量是"+baka+"您的冰霜行者碎片数量是"+afir+"您的自定义碎片数量是"+cust);
 				e.setCancelled(true);
 			}
 			if(getConfig().getString(slot+"t").equals("fish")) 
@@ -326,7 +447,7 @@ public class Main extends JavaPlugin implements Listener {
 				else 
 				{
 					baka-=getConfig().getInt(slot+"p");
-					getConfig().set("fire_"+e.getView().getPlayer().getName(), baka);
+					getConfig().set("baka_"+e.getView().getPlayer().getName(), baka);
 					this.saveConfig();
 					this.reloadConfig();
 					String chenghao = getConfig().getString(slot+"r");
@@ -344,7 +465,7 @@ public class Main extends JavaPlugin implements Listener {
 				else 
 				{
 					afir-=getConfig().getInt(slot+"p");
-					getConfig().set("fire_"+e.getView().getPlayer().getName(), afir);
+					getConfig().set("afir_"+e.getView().getPlayer().getName(), afir);
 					this.saveConfig();
 					this.reloadConfig();
 					String chenghao = getConfig().getString(slot+"r");
@@ -363,16 +484,32 @@ public class Main extends JavaPlugin implements Listener {
 			{
 				//春暖花开称号箱
 				int one = 0;
-				int two = 40;
-				int three = 80;
+				int two = 80;
+				int three = 90;
 				int four = 98;
 				int five = 99;
 				int six = 100;
 				getLogger().info("1");
 				if(minusmoney(Bukkit.getPlayer(e.getView().getPlayer().getName()),50)) 
 				{
-					int random = (int)(Math.random() * 100);
-					getLogger().info("2");
+					int random = (int)(rand.nextInt(100));
+					getLogger().info(random+"");
+					if(random == 64) 
+					{
+						int randomt = (int)(Math.random()*7);
+						if(randomt == 1) 
+						{
+							Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+"恭喜玩家"+e.getView().getPlayer().getName()+"抽到了传奇碎片！自定义称号碎片！");
+							int custom = getConfig().getInt("cus_"+e.getView().getPlayer().getName());
+							if(getConfig().get("cus_"+e.getView().getPlayer().getName()) == null) 
+								custom = 0;
+							custom += 1;
+							getConfig().set("cus_"+e.getView().getPlayer().getName(), custom);
+							this.saveConfig();
+							this.reloadConfig();
+							return;
+						}
+					}
 					if(random>= one && random <= two) 
 					{
 						e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]你开到了'咸鱼称号'碎片x1");
@@ -437,6 +574,10 @@ public class Main extends JavaPlugin implements Listener {
 						this.saveConfig();
 						this.reloadConfig();
 					}
+					if(e.getView().getPlayer().getItemOnCursor()!=null) 
+					{
+						e.getView().getPlayer().setItemOnCursor(null);
+					}
 					e.setCancelled(true);
 				}
 				else 
@@ -447,16 +588,31 @@ public class Main extends JavaPlugin implements Listener {
 			if(e.getSlot() == 3) //夏日炎炎
 			{
 				int one = 0;
-				int two = 40;
-				int three = 80;
+				int two = 80;
+				int three =90;
 				int four = 98;
 				int five = 99;
 				int six = 100;
 				getLogger().info("1");
 				if(minusmoney(Bukkit.getPlayer(e.getView().getPlayer().getName()),80)) 
 				{
-					int random = (int)(Math.random() * 100);
+					int random = (int)(rand.nextInt(100));
 					getLogger().info("2");
+					if(random == 1) 
+					{
+						int randomt = (int)(Math.random()*3);
+						if(randomt == 1) 
+						{
+							Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+"恭喜玩家"+e.getView().getPlayer().getName()+"抽到了传奇碎片！自定义称号碎片！");
+							int custom = getConfig().getInt("cus_"+e.getView().getPlayer().getName());
+							if(getConfig().get("cus_"+e.getView().getPlayer().getName()) == null) 
+								custom = 0;
+							custom += 1;
+							getConfig().set("cus_"+e.getView().getPlayer().getName(), custom);
+							this.saveConfig();
+							this.reloadConfig();
+						}
+					}
 					if(random>= one && random <= two) 
 					{
 						e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]你开到了'烈焰王者'碎片x1");
@@ -532,16 +688,30 @@ public class Main extends JavaPlugin implements Listener {
 			if(e.getSlot() == 5) //秋风瑟瑟
 			{
 				int one = 0;
-				int two = 40;
-				int three = 80;
+				int two = 80;
+				int three = 90;
 				int four = 98;
 				int five = 99;
 				int six = 100;
 				getLogger().info("1");
 				if(minusmoney(Bukkit.getPlayer(e.getView().getPlayer().getName()),100)) 
 				{
-					int random = (int)(Math.random() * 100);
-					getLogger().info("2");
+					int random = (int)(rand.nextInt(100));
+					if(random == 1) 
+					{
+						int randomt = (int)(Math.random()*3);
+						if(randomt == 1) 
+						{
+							Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+"恭喜玩家"+e.getView().getPlayer().getName()+"抽到了传奇碎片！自定义称号碎片！");
+							int custom = getConfig().getInt("cus_"+e.getView().getPlayer().getName());
+							if(getConfig().get("cus_"+e.getView().getPlayer().getName()) == null) 
+								custom = 0;
+							custom += 1;
+							getConfig().set("cus_"+e.getView().getPlayer().getName(), custom);
+							this.saveConfig();
+							this.reloadConfig();
+						}
+					}
 					if(random>= one && random <= two) 
 					{
 						e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]你开到了'baka!'碎片x1");
@@ -616,16 +786,31 @@ public class Main extends JavaPlugin implements Listener {
 			if(e.getSlot() == 7) //冬季攻势
 			{
 				int one = 0;
-				int two = 40;
-				int three = 80;
+				int two = 80;
+				int three = 90;
 				int four = 98;
 				int five = 99;
 				int six = 100;
 				getLogger().info("1");
 				if(minusmoney(Bukkit.getPlayer(e.getView().getPlayer().getName()),250)) 
 				{
-					int random = (int)(Math.random() * 100);
+					int random = (int)(rand.nextInt(100));
 					getLogger().info("2");
+					if(random == 1) 
+					{
+						int randomt = (int)(Math.random()*3);
+						if(randomt == 1) 
+						{
+							Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+"恭喜玩家"+e.getView().getPlayer().getName()+"抽到了传奇碎片！自定义称号碎片！");
+							int custom = getConfig().getInt("cus_"+e.getView().getPlayer().getName());
+							if(getConfig().get("cus_"+e.getView().getPlayer().getName()) == null) 
+								custom = 0;
+							custom += 1;
+							getConfig().set("cus_"+e.getView().getPlayer().getName(), custom);
+							this.saveConfig();
+							this.reloadConfig();
+						}
+					}
 					if(random>= one && random <= two) 
 					{
 						e.getView().getPlayer().sendMessage(ChatColor.YELLOW+"[骗钱]你开到了'非酋'碎片x1");
@@ -696,6 +881,10 @@ public class Main extends JavaPlugin implements Listener {
 				{
 					e.setCancelled(true);
 				}
+			}
+			if(e.getSlot()!=1||e.getSlot()!=3||e.getSlot()!=5||e.getSlot()!=7)
+			{
+				e.setCancelled(true);
 			}
 		}
 		
